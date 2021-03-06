@@ -1,6 +1,6 @@
-<img align="left" width="100" height="100" src="Readme.Images/shield.ico" />
+<img align="left" width="150" height="150" src="Readme.Images/shield.ico" />
 
-## FocusWarden
+# FocusWarden
 
 Aplication for task management and work productivity
 
