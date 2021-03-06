@@ -1,7 +1,7 @@
-![logo](readme.Images/shield.ico){: style="float: left"}
+![logo](Readme.Images/shield.ico){: style="float: left"}
 
 ## FocusWarden
 
 Aplication for task management and work productivity
 
-![application preview](readme.Images/preview.png)
+![application preview](Readme.Images/preview.png)
