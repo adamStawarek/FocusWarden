@@ -1,6 +1,4 @@
-<div style="float: left">
-  ![logo](Readme.Images/shield.ico)
-</div>
+<img align="left" width="100" height="100" src="Readme.Images/shield.ico" />
 
 ## FocusWarden
 
