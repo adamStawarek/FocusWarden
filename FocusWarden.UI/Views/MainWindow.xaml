@@ -1,0 +1,117 @@
+﻿<Window x:Class="FocusWarden.UI.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:views="clr-namespace:FocusWarden.UI.Views"
+        xmlns:viewModels="clr-namespace:FocusWarden.Lib.ViewModels;assembly=FocusWarden.Lib"
+        xmlns:common="clr-namespace:FocusWarden.Common;assembly=FocusWarden.Common"
+        mc:Ignorable="d"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        Title="{x:Static common:Product.AppName}"
+        Height="550"
+        Width="1025"
+        ResizeMode="CanMinimize"
+        WindowStartupLocation="CenterScreen"
+        DataContext="{Binding Source={StaticResource Locator}, Path=Main}"
+        x:Name="This">
+    <Window.Resources>
+        <ResourceDictionary Source="pack://application:,,,/FocusWarden.Styles;component/Theme.xaml" />
+    </Window.Resources>
+    <DockPanel>
+        <DockPanel.Resources>
+            <DataTemplate DataType="{x:Type viewModels:SettingsViewModel}">
+                <views:SettingsView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:SessionViewModel}">
+                <views:SessionView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:StatisticsViewModel}">
+                <views:StatisticsView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:BacklogViewModel}">
+                <views:BacklogView />
+            </DataTemplate>
+        </DockPanel.Resources>
+        <TabControl Style="{StaticResource MaterialDesignNavigatilRailTabControl}">
+            <TabItem Style="{StaticResource MaterialDesignNavigationRailTabItem}">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Home"
+                                                 Width="24"
+                                                 Height="24" />
+                    </StackPanel>
+                </TabItem.Header>
+                <ContentControl Content="{Binding Source={StaticResource Locator}, Path=Session}" />
+            </TabItem>
+            <TabItem Style="{StaticResource MaterialDesignNavigationRailTabItem}">
+                <TabItem.Header>
+                    <materialDesign:PackIcon Kind="ChartBar"
+                                             Width="24"
+                                             Height="24" />
+                </TabItem.Header>
+                <ContentControl Content="{Binding Source={StaticResource Locator}, Path=Statistics}" />
+            </TabItem>
+            <TabItem Style="{StaticResource MaterialDesignNavigationRailTabItem}">
+                <TabItem.Header>
+                    <materialDesign:PackIcon Kind="ViewDashboard"
+                                             Width="24"
+                                             Height="24" />
+                </TabItem.Header>
+                <ContentControl Content="{Binding Source={StaticResource Locator}, Path=Backlog}" />
+            </TabItem>
+            <TabItem Style="{StaticResource MaterialDesignNavigationRailTabItem}">
+                <TabItem.Header>
+                    <materialDesign:PackIcon Kind="Cog"
+                                             Width="24"
+                                             Height="24" />
+                </TabItem.Header>
+                <ContentControl Content="{Binding Source={StaticResource Locator}, Path=Settings}" />
+            </TabItem>
+            <TabItem Style="{StaticResource MaterialDesignNavigationRailTabItem}">
+                <TabItem.Header>
+                    <materialDesign:PackIcon Kind="InformationOutline"
+                                             Width="24"
+                                             Height="24" />
+                </TabItem.Header>
+                <TextBlock>About</TextBlock>
+            </TabItem>
+            <TabItem Style="{StaticResource MaterialDesignNavigationRailTabItem}" IsEnabled="False" />
+            <TabItem Style="{StaticResource MaterialDesignNavigationRailTabItem}" IsEnabled="False" />
+            <TabItem>
+                <TabItem.Style>
+                    <Style TargetType="{x:Type TabItem}"
+                           BasedOn="{StaticResource MaterialDesignNavigationRailTabItem}">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type TabItem}">
+                                    <ContentPresenter VerticalAlignment="Stretch"
+                                                      HorizontalAlignment="Stretch"
+                                                      ContentSource="Header"
+                                                      RecognizesAccessKey="True" />
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </TabItem.Style>
+                <TabItem.Header>
+                    <Button Command="{Binding ExitAppCommand}"
+                            Style="{StaticResource MaterialDesignIconButton}"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center">
+                        <materialDesign:PackIcon Kind="ExitToApp"
+                                                 Width="24"
+                                                 Height="24" />
+                    </Button>
+                </TabItem.Header>
+            </TabItem>
+        </TabControl>
+    </DockPanel>
+</Window>

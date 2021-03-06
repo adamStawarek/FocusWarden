@@ -1,0 +1,242 @@
+﻿<UserControl x:Class="FocusWarden.UI.Controls.TaskListControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:FocusWarden.UI.Controls"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:converters="clr-namespace:FocusWarden.UI.Converters"
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             x:Name="This">
+    <UserControl.Resources>
+        <ResourceDictionary Source="pack://application:,,,/FocusWarden.Styles;component/Theme.xaml" />
+    </UserControl.Resources>
+    <Grid>
+        <Grid.Resources>
+            <converters:NumericConditionToBooleanConverter x:Key="NumericConditionToBooleanConv" />
+            <converters:NullableToBoolConverter x:Key="NullableToBoolConv" />
+
+            <Style x:Key="TaskButtonStyle"
+                   TargetType="Button"
+                   BasedOn="{StaticResource MaterialDesignFloatingActionMiniLightButton}">
+                <Setter Property="Background"
+                        Value="Transparent" />
+                <Setter Property="BorderBrush"
+                        Value="Transparent" />
+                <Setter Property="Margin"
+                        Value="3,0,0,0" />
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver"
+                             Value="True">
+                        <Setter Property="Background"
+                                Value="{StaticResource MaterialDesignTextFieldBoxHoverBackground}" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Resources>
+        <DockPanel>
+            <Button AutomationProperties.AutomationId="AddTodoItemButton"
+                    DockPanel.Dock="Bottom"
+                    HorizontalAlignment="Right"
+                    Margin="10"
+                    Foreground="{StaticResource MaterialDesignLightForeground}"
+                    Command="{Binding OpenCreateTodoItemCommand}"
+                    Style="{StaticResource MaterialDesignFloatingActionAccentButton}">
+                <materialDesign:PackIcon Kind="Plus"
+                                         Height="24"
+                                         Width="24" />
+            </Button>
+            <ScrollViewer AutomationProperties.AutomationId="TodoItemsScrollViewer"
+                          VerticalScrollBarVisibility="Auto"
+                          DockPanel.Dock="Top">
+                <ItemsControl AutomationProperties.AutomationId="TodoItemsCollection"
+                              ItemsSource="{Binding TodoItems}"
+                              Margin="10">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border x:Name="Border"
+                                    BorderThickness="0,0,0,2"
+                                    BorderBrush="{StaticResource MaterialDesignTextBoxBorder}"
+                                    Padding="8">
+                                <DockPanel>
+                                    <TextBlock x:Name="tblTodoItemTitle"
+                                               DockPanel.Dock="Top"
+                                               FontSize="16"
+                                               TextWrapping="Wrap"
+                                               Text="{Binding Title}" />
+                                    <StackPanel Orientation="Horizontal"
+                                                HorizontalAlignment="Right">
+                                        <Button Foreground="IndianRed"
+                                                Style="{StaticResource TaskButtonStyle}"
+                                                Width="22"
+                                                Height="22">
+                                            <materialDesign:PackIcon Kind="Trash" />
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="Click">
+                                                    <i:InvokeCommandAction PassEventArgsToCommand="True"
+                                                                           CommandParameter="{Binding .}"
+                                                                           Command="{Binding DataContext.RemoveTodoItemCommand, ElementName=This}" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </Button>
+                                        <Button  Foreground="{StaticResource  PrimaryHueDarkBrush}"
+                                                 Style="{StaticResource TaskButtonStyle}"
+                                                 Width="22"
+                                                 Height="22">
+                                            <materialDesign:PackIcon Kind="Pencil" />
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="Click">
+                                                    <i:InvokeCommandAction PassEventArgsToCommand="True"
+                                                                           CommandParameter="{Binding .}"
+                                                                           Command="{Binding DataContext.OpenEditTodoItemCommand, ElementName=This}" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </Button>
+                                        <Button Foreground="GreenYellow"
+                                                Style="{StaticResource TaskButtonStyle}"
+                                                Width="22"
+                                                Height="22">
+                                            <materialDesign:PackIcon>
+                                                <materialDesign:PackIcon.Style>
+                                                    <Style TargetType="materialDesign:PackIcon">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsDone}"
+                                                                         Value="False">
+                                                                <Setter Property="Kind"
+                                                                        Value="CheckboxBlankCircleOutline" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding IsDone}"
+                                                                         Value="True">
+                                                                <Setter Property="Kind"
+                                                                        Value="CheckboxMarkedCircle" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </materialDesign:PackIcon.Style>
+                                            </materialDesign:PackIcon>
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="Click">
+                                                    <i:InvokeCommandAction PassEventArgsToCommand="True"
+                                                                           CommandParameter="{Binding .}"
+                                                                           Command="{Binding DataContext.MarkTodoItemAsDoneCommand, ElementName=This}" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </Button>
+                                    </StackPanel>
+                                </DockPanel>
+                            </Border>
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding IsDone}"
+                                             Value="True">
+                                    <Setter TargetName="tblTodoItemTitle"
+                                            Property="TextBlock.TextDecorations"
+                                            Value="Strikethrough" />
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+
+            <TextBlock Text="Your tasks for today"
+                       Margin="0,60,0,0"
+                       FontSize="16"
+                       Opacity="0.5"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Style.Triggers>
+                            <DataTrigger Value="True">
+                                <DataTrigger.Binding>
+                                    <MultiBinding Converter="{StaticResource NumericConditionToBooleanConv}">
+                                        <Binding Path="TodoItems.Count" />
+                                        <Binding Source="1" />
+                                        <Binding Source="0" />
+                                        <Binding Source="GreaterThanOrEqual" />
+                                    </MultiBinding>
+                                </DataTrigger.Binding>
+                                <Setter Property="Visibility"
+                                        Value="Hidden" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+        </DockPanel>
+
+        <materialDesign:DialogHost x:Name="Dialog"
+                                   IsOpen="{Binding IsTodoItemPopupOpen}"
+                                   CloseOnClickAway="True"
+                                   FocusManager.FocusedElement="{Binding ElementName=TodoItemTextBox}">
+            <materialDesign:DialogHost.DialogContent>
+                <StackPanel Margin="16">
+                    <TextBlock>
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding EditedToDoItem, Converter={StaticResource NullableToBoolConv}}"
+                                                 Value="True">
+                                        <Setter Property="Text"
+                                                Value="Edit task" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding EditedToDoItem, Converter={StaticResource NullableToBoolConv}}"
+                                                 Value="False">
+                                        <Setter Property="Text"
+                                                Value="Create new task" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <TextBox AutomationProperties.AutomationId="AddTodoItemTextBox"
+                             Margin="0 8 0 0"
+                             Width="180"
+                             HorizontalAlignment="Stretch"
+                             Text="{Binding DataContext.TodoItemPopupText, Mode=OneWay, ElementName=This}"
+                             AcceptsReturn="True"
+                             TextWrapping="Wrap"
+                             x:Name="TodoItemTextBox">
+                        <TextBox.Style>
+                            <Style TargetType="TextBox"
+                                   BasedOn="{StaticResource MaterialDesignTextBox}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsOpen,ElementName=Dialog}"
+                                                 Value="False">
+                                        <Setter Property="TextBox.Text"
+                                                Value="" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBox.Style>
+                    </TextBox>
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Right">
+                        <Button AutomationProperties.AutomationId="SaveTodoItemButton"
+                                Style="{StaticResource MaterialDesignFlatButton}"
+                                Content="Save"
+                                IsDefault="True"
+                                Margin="0 8 8 0"
+                                Command="materialDesign:DialogHost.CloseDialogCommand">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <i:InvokeCommandAction PassEventArgsToCommand="True"
+                                                           CommandParameter="{Binding Path=Text,ElementName=TodoItemTextBox}"
+                                                           Command="{Binding SaveTodoItemCommand}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Button>
+                        <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                Content="Cancel"
+                                IsCancel="True"
+                                Margin="0 8 8 0"
+                                Command="materialDesign:DialogHost.CloseDialogCommand" />
+                    </StackPanel>
+                </StackPanel>
+            </materialDesign:DialogHost.DialogContent>
+        </materialDesign:DialogHost>
+    </Grid>
+</UserControl>
