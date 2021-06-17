@@ -51,12 +51,12 @@
                 Content="Start"
                 Command="{Binding StartTimerCommand}"
                 Visibility="{Binding SessionActive, Converter={StaticResource InverseBoolToVisConverter}}" />
-        <Button  AutomationProperties.AutomationId="StopButton"
-                 FontSize="20"
-                 Width="200"
-                 Content="Give up"
-                 Style="{StaticResource MaterialDesignFlatButton}"
-                 Command="{Binding StopTimerCommand}"
-                 Visibility="{Binding SessionActive, Converter={StaticResource BooleanToVisibilityConverter}}" />
+        <Button AutomationProperties.AutomationId="StopButton"
+                FontSize="20"
+                Width="200"
+                Content="Give up"
+                Style="{StaticResource MaterialDesignFlatButton}"
+                Command="{Binding StopTimerCommand}"
+                Visibility="{Binding SessionActive, Converter={StaticResource BooleanToVisibilityConverter}}" />
     </StackPanel>
 </UserControl>

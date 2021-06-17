@@ -1,12 +1,13 @@
-﻿using FocusWarden.DataAccess.Domain.TodoItems.Command;
-using FocusWarden.DataAccess.Interfaces;
-using MediatR;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace FocusWarden.DataAccess.Domain.TodoItems.CommandHandler
+﻿namespace FocusWarden.DataAccess.Domain.TodoItems.CommandHandler
 {
+    using Command;
+    using Interfaces;
+    using MediatR;
+    using Models;
+    using System;
+    using System.Threading;
+    using System.Threading.Tasks;
+
     public class AddTodoItemCommandHandler : IRequestHandler<AddTodoItemCommand>
     {
         private readonly IDataSettings dataSettings;
@@ -19,12 +20,7 @@ namespace FocusWarden.DataAccess.Domain.TodoItems.CommandHandler
         public Task<Unit> Handle(AddTodoItemCommand request, CancellationToken cancellationToken)
         {
             dataSettings.TodoItems.LocalSet.Add(
-                new Models.TodoItem()
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    CreatedAt = DateTime.Now,
-                    Title = request.Title
-                });
+                new TodoItem {Id = Guid.NewGuid().ToString(), CreatedAt = DateTime.Now, Title = request.Title});
             dataSettings.Save();
             return Task.FromResult(new Unit());
         }

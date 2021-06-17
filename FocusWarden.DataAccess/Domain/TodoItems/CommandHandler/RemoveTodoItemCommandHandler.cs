@@ -1,12 +1,12 @@
-﻿using FocusWarden.DataAccess.Domain.TodoItems.Command;
-using FocusWarden.DataAccess.Interfaces;
-using MediatR;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace FocusWarden.DataAccess.Domain.TodoItems.CommandHandler
+﻿namespace FocusWarden.DataAccess.Domain.TodoItems.CommandHandler
 {
+    using Command;
+    using Interfaces;
+    using MediatR;
+    using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
+
     public class RemoveTodoItemCommandHandler : IRequestHandler<RemoveTodoItemCommand>
     {
         private readonly IDataSettings dataSettings;

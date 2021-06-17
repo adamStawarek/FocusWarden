@@ -1,78 +1,19 @@
-﻿using FocusWarden.DataAccess.Domain.FocusSessions.Query;
-using LiveCharts;
-using LiveCharts.Defaults;
-using LiveCharts.Wpf;
-using MediatR;
-using System;
-using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Microsoft.Toolkit.Mvvm.Input;
-
-namespace FocusWarden.Lib.ViewModels
+﻿namespace FocusWarden.Lib.ViewModels
 {
+    using DataAccess.Domain.FocusSessions.Query;
+    using LiveCharts;
+    using LiveCharts.Defaults;
+    using LiveCharts.Wpf;
+    using MediatR;
+    using Microsoft.Toolkit.Mvvm.ComponentModel;
+    using Microsoft.Toolkit.Mvvm.Input;
+    using System;
+    using System.Globalization;
+    using System.Linq;
+    using System.Threading.Tasks;
+
     public class StatisticsViewModel : ObservableObject
     {
-        #region Fields
-
-        private readonly IMediator mediator;
-        private readonly Func<double, string> dailyYFormatter;
-        private readonly Func<double, string> weeklyYFormatter;
-        private string[] dailyLabels;
-        private string[] weeklyLabels;
-        private string[] weekNumbers;
-
-        #endregion
-
-        #region Properties
-
-        public SeriesCollection DailySeries { get; set; }
-
-        public string[] DailyLabels
-        {
-            get => dailyLabels;
-            set => SetProperty(ref dailyLabels, value);
-        }
-
-        public Func<double, string> DailyYFormatter
-        {
-            get => dailyYFormatter;
-            init => SetProperty(ref dailyYFormatter, value);
-        }
-
-        public SeriesCollection WeeklySeries { get; set; }
-
-        public string[] WeeklyLabels
-        {
-            get => weeklyLabels;
-            set => SetProperty(ref weeklyLabels, value);
-        }
-
-        public Func<double, string> WeeklyYFormatter
-        {
-            get => weeklyYFormatter;
-            private init => SetProperty(ref weeklyYFormatter, value);
-        }
-
-        public ChartValues<HeatPoint> MonthlySeries { get; set; }
-
-        public string[] WeekNumbers
-        {
-            get => weekNumbers;
-            set => SetProperty(ref weekNumbers, value);
-        }
-
-        public string[] WeekDays { get; set; }
-
-        #endregion
-
-        #region Commands
-
-        public IAsyncRelayCommand LoadedCommand { get; }
-
-        #endregion
-
         public StatisticsViewModel(IMediator mediator)
         {
             this.mediator = mediator;
@@ -87,20 +28,21 @@ namespace FocusWarden.Lib.ViewModels
 
             MonthlySeries = new ChartValues<HeatPoint>();
             WeekNumbers = Array.Empty<string>();
-            var weekDays = new[]
+            DayOfWeek[] weekDays =
             {
-                DayOfWeek.Monday,
-                DayOfWeek.Tuesday,
-                DayOfWeek.Wednesday,
-                DayOfWeek.Thursday,
-                DayOfWeek.Friday,
-                DayOfWeek.Saturday,
-                DayOfWeek.Sunday
+                DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday,
+                DayOfWeek.Saturday, DayOfWeek.Sunday
             };
             WeekDays = weekDays.Select(d => d.ToString()).ToArray();
 
             LoadedCommand = new AsyncRelayCommand(OnLoadedAsync);
         }
+
+        #region Commands
+
+        public IAsyncRelayCommand LoadedCommand { get; }
+
+        #endregion
 
         private Task OnLoadedAsync()
         {
@@ -114,7 +56,7 @@ namespace FocusWarden.Lib.ViewModels
         private async Task SetUpDailySessionCountChart()
         {
             var focusSession = await mediator.Send(
-                new GetFocusSessionsQuery() {Date = DateTime.Now});
+                new GetFocusSessionsQuery {Date = DateTime.Now});
 
             var groupedByHour = focusSession
                 .GroupBy(s => new {s.Date.Hour, s.IsCompleted})
@@ -169,10 +111,10 @@ namespace FocusWarden.Lib.ViewModels
 
         private async Task SetUpWeeklySessionCountChart()
         {
-            var currentDay = DateTime.Now.DayOfWeek == DayOfWeek.Sunday ? 7 : (int) DateTime.Now.DayOfWeek;
+            var currentDay = DateTime.Now.DayOfWeek == DayOfWeek.Sunday ? 7 : (int)DateTime.Now.DayOfWeek;
             var fromDate = DateTime.Now.AddDays(1 - currentDay);
             var focusSession = await mediator.Send(
-                new GetFocusSessionsQuery() {FromDate = fromDate, ToDate = DateTime.Now});
+                new GetFocusSessionsQuery {FromDate = fromDate, ToDate = DateTime.Now});
 
             var groupedByDay = focusSession
                 .GroupBy(s => new {s.Date.DayOfWeek, s.IsCompleted})
@@ -187,14 +129,14 @@ namespace FocusWarden.Lib.ViewModels
             var days = Enumerable.Range(1, currentDay).ToList();
             foreach (var dayOfWeek in days)
             {
-                if (!completed.ContainsKey((DayOfWeek) (dayOfWeek % 7)))
+                if (!completed.ContainsKey((DayOfWeek)(dayOfWeek % 7)))
                 {
-                    completed.Add((DayOfWeek) dayOfWeek, 0);
+                    completed.Add((DayOfWeek)dayOfWeek, 0);
                 }
 
-                if (!notCompleted.ContainsKey((DayOfWeek) (dayOfWeek % 7)))
+                if (!notCompleted.ContainsKey((DayOfWeek)(dayOfWeek % 7)))
                 {
-                    notCompleted.Add((DayOfWeek) dayOfWeek, 0);
+                    notCompleted.Add((DayOfWeek)dayOfWeek, 0);
                 }
             }
 
@@ -224,7 +166,7 @@ namespace FocusWarden.Lib.ViewModels
                 }
             });
 
-            WeeklyLabels = days.Select(d => ((DayOfWeek) (d % 7)).ToString()).ToArray();
+            WeeklyLabels = days.Select(d => ((DayOfWeek)(d % 7)).ToString()).ToArray();
         }
 
         private async Task SetUpMonthlySessionCountChart()
@@ -233,7 +175,7 @@ namespace FocusWarden.Lib.ViewModels
             var firstDayOfMonth = new DateTime(today.Year, today.Month, 1);
             var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
             var focusSessions = await mediator.Send(
-                new GetFocusSessionsQuery() {FromDate = firstDayOfMonth, ToDate = lastDayOfMonth, Completed = true});
+                new GetFocusSessionsQuery {FromDate = firstDayOfMonth, ToDate = lastDayOfMonth, Completed = true});
 
             MonthlySeries.Clear();
 
@@ -245,16 +187,72 @@ namespace FocusWarden.Lib.ViewModels
 
                 var daySessions = focusSessions.Count(s => s.Date.Day == d);
 
-                var y = day.DayOfWeek == DayOfWeek.Sunday ? 6 : ((int) day.DayOfWeek) - 1;
+                var y = day.DayOfWeek == DayOfWeek.Sunday ? 6 : (int)day.DayOfWeek - 1;
 
                 var x = currentWeekInMonth;
 
-                MonthlySeries.Add(new HeatPoint() {X = x, Y = y, Weight = daySessions});
+                MonthlySeries.Add(new HeatPoint {X = x, Y = y, Weight = daySessions});
 
-                if (day.DayOfWeek == DayOfWeek.Sunday) currentWeekInMonth++;
+                if (day.DayOfWeek == DayOfWeek.Sunday)
+                {
+                    currentWeekInMonth++;
+                }
             });
 
             WeekNumbers = Enumerable.Range(0, currentWeekInMonth + 1).Select(s => s.ToString()).ToArray();
         }
+
+        #region Fields
+
+        private readonly IMediator mediator;
+        private readonly Func<double, string> dailyYFormatter;
+        private readonly Func<double, string> weeklyYFormatter;
+        private string[] dailyLabels;
+        private string[] weeklyLabels;
+        private string[] weekNumbers;
+
+        #endregion
+
+        #region Properties
+
+        public SeriesCollection DailySeries { get; set; }
+
+        public string[] DailyLabels
+        {
+            get => dailyLabels;
+            set => SetProperty(ref dailyLabels, value);
+        }
+
+        public Func<double, string> DailyYFormatter
+        {
+            get => dailyYFormatter;
+            init => SetProperty(ref dailyYFormatter, value);
+        }
+
+        public SeriesCollection WeeklySeries { get; set; }
+
+        public string[] WeeklyLabels
+        {
+            get => weeklyLabels;
+            set => SetProperty(ref weeklyLabels, value);
+        }
+
+        public Func<double, string> WeeklyYFormatter
+        {
+            get => weeklyYFormatter;
+            private init => SetProperty(ref weeklyYFormatter, value);
+        }
+
+        public ChartValues<HeatPoint> MonthlySeries { get; set; }
+
+        public string[] WeekNumbers
+        {
+            get => weekNumbers;
+            set => SetProperty(ref weekNumbers, value);
+        }
+
+        public string[] WeekDays { get; set; }
+
+        #endregion
     }
 }

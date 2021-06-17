@@ -1,8 +1,8 @@
-﻿using FocusWarden.DataAccess.Models;
-using System;
-
-namespace FocusWarden.DataAccess.Interfaces
+﻿namespace FocusWarden.DataAccess.Interfaces
 {
+    using Models;
+    using System;
+
     public interface IDataSettings
     {
         public DataSet<TodoItem> TodoItems { get; set; }

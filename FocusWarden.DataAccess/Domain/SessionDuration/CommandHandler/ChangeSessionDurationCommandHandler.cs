@@ -1,12 +1,13 @@
-﻿using FocusWarden.DataAccess.Domain.SessionDuration.Command;
-using FocusWarden.DataAccess.Interfaces;
-using MediatR;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace FocusWarden.DataAccess.Domain.SessionDuration.CommandHandler
+﻿namespace FocusWarden.DataAccess.Domain.SessionDuration.CommandHandler
 {
+    using Command;
+    using Common.Enumerators;
+    using Interfaces;
+    using MediatR;
+    using System;
+    using System.Threading;
+    using System.Threading.Tasks;
+
     public class ChangeSessionDurationCommandHandler : IRequestHandler<ChangeSessionDurationCommand, TimeSpan>
     {
         private readonly IDataSettings dataSettings;
@@ -20,9 +21,9 @@ namespace FocusWarden.DataAccess.Domain.SessionDuration.CommandHandler
         {
             dataSettings.SessionDuration = request.Type switch
             {
-                Common.Enumerators.AtomicOperationType.Increase => dataSettings.SessionDuration.Add(TimeSpan.FromMinutes(5)),
-                Common.Enumerators.AtomicOperationType.Decrease => dataSettings.SessionDuration.Subtract(TimeSpan.FromMinutes(5)),
-                _ => dataSettings.SessionDuration,
+                AtomicOperationType.Increase => dataSettings.SessionDuration.Add(TimeSpan.FromMinutes(5)),
+                AtomicOperationType.Decrease => dataSettings.SessionDuration.Subtract(TimeSpan.FromMinutes(5)),
+                _ => dataSettings.SessionDuration
             };
             dataSettings.Save();
 

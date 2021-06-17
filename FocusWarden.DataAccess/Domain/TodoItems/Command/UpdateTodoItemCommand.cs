@@ -1,7 +1,7 @@
-﻿using MediatR;
-
-namespace FocusWarden.DataAccess.Domain.TodoItems.Command
+﻿namespace FocusWarden.DataAccess.Domain.TodoItems.Command
 {
+    using MediatR;
+
     public class UpdateTodoItemCommand : IRequest
     {
         public string Id { get; set; }

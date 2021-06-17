@@ -1,8 +1,8 @@
-﻿using MediatR;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
-
-namespace FocusWarden.Lib.ViewModels
+﻿namespace FocusWarden.Lib.ViewModels
 {
+    using MediatR;
+    using Microsoft.Toolkit.Mvvm.ComponentModel;
+
     public class PersonalizationViewModel : ObservableObject
     {
         private readonly IMediator mediator;

@@ -1,14 +1,13 @@
-﻿using FocusWarden.DataAccess.Domain.FocusSessions.Query;
-using FocusWarden.DataAccess.Interfaces;
-using FocusWarden.DataAccess.Models;
-using MediatR;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace FocusWarden.DataAccess.Domain.FocusSessions.QueryHandler
+﻿namespace FocusWarden.DataAccess.Domain.FocusSessions.QueryHandler
 {
+    using Interfaces;
+    using MediatR;
+    using Models;
+    using Query;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public class GetFocusSessionsQueryHandler : IRequestHandler<GetFocusSessionsQuery, IEnumerable<FocusSession>>
     {
@@ -19,7 +18,8 @@ namespace FocusWarden.DataAccess.Domain.FocusSessions.QueryHandler
             this.dataSettings = dataSettings;
         }
 
-        public Task<IEnumerable<FocusSession>> Handle(GetFocusSessionsQuery request, CancellationToken cancellationToken)
+        public Task<IEnumerable<FocusSession>> Handle(GetFocusSessionsQuery request,
+            CancellationToken cancellationToken)
         {
             IEnumerable<FocusSession> focusSessions = dataSettings.FocusSessions.LocalSet;
 
@@ -33,7 +33,7 @@ namespace FocusWarden.DataAccess.Domain.FocusSessions.QueryHandler
                 focusSessions = focusSessions.Where(s => s.IsCompleted == request.Completed);
             }
 
-            if(request.FromDate.HasValue && !request.Date.HasValue)
+            if (request.FromDate.HasValue && !request.Date.HasValue)
             {
                 focusSessions = focusSessions.Where(s => s.Date.Date >= request.FromDate.Value.Date);
             }
@@ -46,5 +46,4 @@ namespace FocusWarden.DataAccess.Domain.FocusSessions.QueryHandler
             return Task.FromResult(focusSessions);
         }
     }
-
 }

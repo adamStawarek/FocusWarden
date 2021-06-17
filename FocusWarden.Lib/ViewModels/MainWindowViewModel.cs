@@ -1,17 +1,17 @@
-﻿using System.Windows;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Microsoft.Toolkit.Mvvm.Input;
-
-namespace FocusWarden.Lib.ViewModels
+﻿namespace FocusWarden.Lib.ViewModels
 {
+    using Microsoft.Toolkit.Mvvm.ComponentModel;
+    using Microsoft.Toolkit.Mvvm.Input;
+    using System.Windows;
+
     public class MainWindowViewModel : ObservableObject
     {
-        public IRelayCommand ExitAppCommand { get; }
-
         public MainWindowViewModel()
         {
             ExitAppCommand = new RelayCommand(ExitApp);
         }
+
+        public IRelayCommand ExitAppCommand { get; }
 
         private void ExitApp()
         {

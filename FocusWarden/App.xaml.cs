@@ -1,8 +1,8 @@
-﻿using FocusWarden.Common;
-using FocusWarden.Lib;
-
-namespace FocusWarden
+﻿namespace FocusWarden
 {
+    using Common;
+    using Lib;
+
     public partial class App
     {
         public const string AppName = "FocusWarden";
@@ -12,7 +12,7 @@ namespace FocusWarden
         {
             Product.AppName = AppName;
             Product.Year = Year;
-            
+
             DependencyResolver.Instance.ConfigureServices();
         }
     }

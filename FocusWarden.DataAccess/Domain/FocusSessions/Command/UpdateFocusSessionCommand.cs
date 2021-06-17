@@ -1,8 +1,8 @@
-﻿using MediatR;
-using System;
-
-namespace FocusWarden.DataAccess.Domain.FocusSessions.Command
+﻿namespace FocusWarden.DataAccess.Domain.FocusSessions.Command
 {
+    using MediatR;
+    using System;
+
     public class UpdateFocusSessionCommand : IRequest
     {
         public string Id { get; set; }

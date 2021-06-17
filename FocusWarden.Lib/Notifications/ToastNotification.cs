@@ -1,11 +1,11 @@
-﻿using System;
-
-namespace FocusWarden.Lib.Notifications
+﻿namespace FocusWarden.Lib.Notifications
 {
+    using System;
+
     //TODO:
     public sealed class ToastNotification : IToastNotification, IDisposable
     {
-        public ToastNotification()
+        public void Dispose()
         {
         }
 
@@ -22,10 +22,6 @@ namespace FocusWarden.Lib.Notifications
         }
 
         public void ShowWarning(string message)
-        {
-        }
-
-        public void Dispose()
         {
         }
     }

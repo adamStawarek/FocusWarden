@@ -1,9 +1,9 @@
-﻿using System;
-using System.Globalization;
-using System.Windows.Data;
-
-namespace FocusWarden.UI.Converters
+﻿namespace FocusWarden.UI.Converters
 {
+    using System;
+    using System.Globalization;
+    using System.Windows.Data;
+
     public class NullableToBoolConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

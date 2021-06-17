@@ -1,25 +1,25 @@
-﻿using FocusWarden.DataAccess.Interfaces;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-
-namespace FocusWarden.DataAccess
+﻿namespace FocusWarden.DataAccess
 {
+    using Interfaces;
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+
     [Serializable]
     public class LocalSet<T> : ISetCollection<T> where T : ISetEntity
     {
-        public List<T> Items { get; set; }
-
         public LocalSet()
         {
             Items = new List<T>();
         }
 
+        public List<T> Items { get; set; }
+
         public int Count => Items.Count;
 
         public bool IsReadOnly => false;
 
-        public T this[int index] { get => Items[index]; set => Items[index]=value; }
+        public T this[int index] { get => Items[index]; set => Items[index] = value; }
 
         public void Add(T item)
         {

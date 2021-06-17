@@ -37,9 +37,9 @@
                                 VerticalAlignment="Top">
                             <Button.RenderTransform>
                                 <ScaleTransform ScaleX="1.0"
-                                                ScaleY="1.0"></ScaleTransform>
+                                                ScaleY="1.0" />
                             </Button.RenderTransform>
-                            <materialDesign:PackIcon Kind="Delete"                                                    
+                            <materialDesign:PackIcon Kind="Delete"
                                                      Foreground="OrangeRed" />
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="Click">
@@ -48,7 +48,7 @@
                                                            Command="{Binding DataContext.RemoveFocusSessionCommand, ElementName=This}" />
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
-                            
+
                             <Button.Style>
                                 <Style TargetType="Button"
                                        BasedOn="{StaticResource MaterialDesignIconButton}">
@@ -79,7 +79,7 @@
                                         </EventTrigger>
                                     </Style.Triggers>
                                 </Style>
-                                
+
                             </Button.Style>
                         </Button>
                         <materialDesign:PackIcon x:Name="TrophyIcon"

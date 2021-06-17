@@ -82,10 +82,10 @@
                                                 </i:EventTrigger>
                                             </i:Interaction.Triggers>
                                         </Button>
-                                        <Button  Foreground="{StaticResource  PrimaryHueDarkBrush}"
-                                                 Style="{StaticResource TaskButtonStyle}"
-                                                 Width="22"
-                                                 Height="22">
+                                        <Button Foreground="{StaticResource  PrimaryHueDarkBrush}"
+                                                Style="{StaticResource TaskButtonStyle}"
+                                                Width="22"
+                                                Height="22">
                                             <materialDesign:PackIcon Kind="Pencil" />
                                             <i:Interaction.Triggers>
                                                 <i:EventTrigger EventName="Click">
@@ -178,13 +178,15 @@
                         <TextBlock.Style>
                             <Style TargetType="TextBlock">
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding EditedToDoItem, Converter={StaticResource NullableToBoolConv}}"
-                                                 Value="True">
+                                    <DataTrigger
+                                        Binding="{Binding EditedToDoItem, Converter={StaticResource NullableToBoolConv}}"
+                                        Value="True">
                                         <Setter Property="Text"
                                                 Value="Edit task" />
                                     </DataTrigger>
-                                    <DataTrigger Binding="{Binding EditedToDoItem, Converter={StaticResource NullableToBoolConv}}"
-                                                 Value="False">
+                                    <DataTrigger
+                                        Binding="{Binding EditedToDoItem, Converter={StaticResource NullableToBoolConv}}"
+                                        Value="False">
                                         <Setter Property="Text"
                                                 Value="Create new task" />
                                     </DataTrigger>

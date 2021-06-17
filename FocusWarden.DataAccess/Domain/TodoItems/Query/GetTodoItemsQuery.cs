@@ -1,11 +1,11 @@
-﻿using FocusWarden.DataAccess.Models;
-using MediatR;
-using System.Collections.Generic;
-
-namespace FocusWarden.DataAccess.Domain.TodoItems.Query
+﻿namespace FocusWarden.DataAccess.Domain.TodoItems.Query
 {
+    using MediatR;
+    using Models;
+    using System.Collections.Generic;
+
     public class GetTodoItemsQuery : IRequest<IEnumerable<TodoItem>>
     {
-        public Models.FilterSettings Settings { get; set; }
+        public FilterSettings Settings { get; set; }
     }
 }

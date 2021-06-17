@@ -1,8 +1,9 @@
-﻿using MediatR;
-
-namespace FocusWarden.DataAccess.Domain.FilterSettings.Query
+﻿namespace FocusWarden.DataAccess.Domain.FilterSettings.Query
 {
-    public class GetFilterSettingsQuery : IRequest<Models.FilterSettings>
+    using MediatR;
+    using Models;
+
+    public class GetFilterSettingsQuery : IRequest<FilterSettings>
     {
     }
 }

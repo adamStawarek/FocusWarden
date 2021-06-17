@@ -1,10 +1,10 @@
-﻿using FocusWarden.DataAccess.Models;
-using MediatR;
-using System;
-using System.Collections.Generic;
-
-namespace FocusWarden.DataAccess.Domain.FocusSessions.Query
+﻿namespace FocusWarden.DataAccess.Domain.FocusSessions.Query
 {
+    using MediatR;
+    using Models;
+    using System;
+    using System.Collections.Generic;
+
     public class GetFocusSessionsQuery : IRequest<IEnumerable<FocusSession>>
     {
         public DateTime? Date { get; set; }

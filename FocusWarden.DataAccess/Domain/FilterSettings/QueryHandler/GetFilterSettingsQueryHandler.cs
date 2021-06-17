@@ -1,12 +1,13 @@
-﻿using FocusWarden.DataAccess.Domain.FilterSettings.Query;
-using FocusWarden.DataAccess.Interfaces;
-using MediatR;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace FocusWarden.DataAccess.Domain.FilterSettings.QueryHandler
+﻿namespace FocusWarden.DataAccess.Domain.FilterSettings.QueryHandler
 {
-    public class GetFilterSettingsQueryHandler : IRequestHandler<GetFilterSettingsQuery, Models.FilterSettings>
+    using Interfaces;
+    using MediatR;
+    using Models;
+    using Query;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public class GetFilterSettingsQueryHandler : IRequestHandler<GetFilterSettingsQuery, FilterSettings>
     {
         private readonly IDataSettings dataSettings;
 
@@ -15,7 +16,7 @@ namespace FocusWarden.DataAccess.Domain.FilterSettings.QueryHandler
             this.dataSettings = dataSettings;
         }
 
-        public Task<Models.FilterSettings> Handle(GetFilterSettingsQuery request, CancellationToken cancellationToken)
+        public Task<FilterSettings> Handle(GetFilterSettingsQuery request, CancellationToken cancellationToken)
         {
             return Task.FromResult(dataSettings.Settings);
         }

@@ -58,7 +58,7 @@
                        Margin="15,5" />
             <lvc:CartesianChart
                 Series="{Binding DailySeries}"
-                                LegendLocation="None">
+                LegendLocation="None">
                 <lvc:CartesianChart.AxisY>
                     <lvc:Axis Title="Session count"
                               LabelFormatter="{Binding DailyYFormatter}">
@@ -104,7 +104,7 @@
 
                 </lvc:CartesianChart.AxisX>
                 <lvc:CartesianChart.AxisY>
-                    <lvc:Axis Title="Day" 
+                    <lvc:Axis Title="Day"
                               Labels="{Binding WeekDays}" />
                 </lvc:CartesianChart.AxisY>
             </lvc:CartesianChart>

@@ -1,17 +1,17 @@
-﻿using FocusWarden.DataAccess.Interfaces;
-using System;
-
-namespace FocusWarden.DataAccess
+﻿namespace FocusWarden.DataAccess
 {
+    using Interfaces;
+    using System;
+
     public class DataSet<T> where T : ISetEntity
     {
-        public LocalSet<T> LocalSet { get; set; }
-
-        public DateTime DateTime { get; set; }
-
         public DataSet()
         {
             LocalSet = new LocalSet<T>();
         }
+
+        public LocalSet<T> LocalSet { get; set; }
+
+        public DateTime DateTime { get; set; }
     }
 }

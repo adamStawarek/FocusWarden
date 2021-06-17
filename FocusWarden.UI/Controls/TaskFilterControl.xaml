@@ -27,14 +27,14 @@
         <Grid Background="{StaticResource MaterialDesignDarkBackground}"
               DataContext="{Binding FilterSettings}">
             <Grid.RowDefinitions>
-                <RowDefinition  Height="Auto"
-                                SharedSizeGroup="groupA" />
-                <RowDefinition  Height="Auto"
-                                SharedSizeGroup="groupA" />
-                <RowDefinition  Height="Auto"
-                                SharedSizeGroup="groupA" />
-                <RowDefinition  Height="Auto"
-                                SharedSizeGroup="groupA" />
+                <RowDefinition Height="Auto"
+                               SharedSizeGroup="groupA" />
+                <RowDefinition Height="Auto"
+                               SharedSizeGroup="groupA" />
+                <RowDefinition Height="Auto"
+                               SharedSizeGroup="groupA" />
+                <RowDefinition Height="Auto"
+                               SharedSizeGroup="groupA" />
             </Grid.RowDefinitions>
 
             <StackPanel Orientation="Horizontal"

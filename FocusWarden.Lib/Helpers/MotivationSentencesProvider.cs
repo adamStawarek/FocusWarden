@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using FocusWarden.Lib.Helpers.Interfaces;
-
-namespace FocusWarden.Lib.Helpers
+﻿namespace FocusWarden.Lib.Helpers
 {
+    using Interfaces;
+    using System;
+    using System.Collections.Generic;
+
     internal class MotivationSentencesProvider : IMotivationSentenceProvider
     {
         private static readonly Lazy<IEnumerable<string>> MotivationSentences =
@@ -25,7 +25,7 @@ namespace FocusWarden.Lib.Helpers
                 "Success is no accident. It is hard work, perseverance, learning, studying, sacrifice, and most of all, love of what you are doing or learning to do.",
                 "The secret of your success is determined by your daily agenda.",
                 "Don’t let what you cannot do interfere with what you can do.",
-                "The difference between a successful person and others is not a lack of strength, not a lack of knowledge, but rather a lack in will.",
+                "The difference between a successful person and others is not a lack of strength, not a lack of knowledge, but rather a lack in will."
             });
 
         public IEnumerable<string> GetMotivationSentences()

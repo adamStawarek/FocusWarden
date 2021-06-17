@@ -1,27 +1,44 @@
-﻿using FocusWarden.Common.Enumerators;
-using System;
-using System.Globalization;
-using System.Windows;
-using System.Windows.Data;
-
-namespace FocusWarden.UI.Converters
+﻿namespace FocusWarden.UI.Converters
 {
+    using Common.Enumerators;
+    using System;
+    using System.Globalization;
+    using System.Windows;
+    using System.Windows.Data;
+
     public class NumericConditionToBooleanConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             if (values.Length != 4)
+            {
                 return DependencyProperty.UnsetValue;
+            }
+
             if (values[0] is int intVal)
+            {
                 values[0] = (double)intVal;
+            }
+
             if (values[0] is not double val)
+            {
                 return DependencyProperty.UnsetValue;
-            if (!(double.TryParse(values[1] as string, out var conditionVal)))
+            }
+
+            if (!double.TryParse(values[1] as string, out var conditionVal))
+            {
                 return DependencyProperty.UnsetValue;
-            if (!(int.TryParse(values[2] as string, out var precision)))
+            }
+
+            if (!int.TryParse(values[2] as string, out var precision))
+            {
                 return DependencyProperty.UnsetValue;
+            }
+
             if (!Enum.TryParse(values[3] as string, out BooleanConditionType conditionType))
+            {
                 return DependencyProperty.UnsetValue;
+            }
 
             return conditionType switch
             {

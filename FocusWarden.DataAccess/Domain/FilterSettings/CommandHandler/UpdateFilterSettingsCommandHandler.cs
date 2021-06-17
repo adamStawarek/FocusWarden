@@ -1,11 +1,11 @@
-﻿using FocusWarden.DataAccess.Domain.FilterSettings.Command;
-using FocusWarden.DataAccess.Interfaces;
-using MediatR;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace FocusWarden.DataAccess.Domain.FilterSettings.CommandHandler
+﻿namespace FocusWarden.DataAccess.Domain.FilterSettings.CommandHandler
 {
+    using Command;
+    using Interfaces;
+    using MediatR;
+    using System.Threading;
+    using System.Threading.Tasks;
+
     public class UpdateFilterSettingsCommandHandler : IRequestHandler<UpdateFilterSettingsCommand>
     {
         private readonly IDataSettings dataSettings;

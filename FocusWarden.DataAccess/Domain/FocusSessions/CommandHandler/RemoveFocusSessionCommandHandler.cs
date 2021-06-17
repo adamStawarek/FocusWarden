@@ -1,13 +1,13 @@
-﻿using FocusWarden.DataAccess.Domain.FocusSessions.Command;
-using FocusWarden.DataAccess.Interfaces;
-using MediatR;
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace FocusWarden.DataAccess.Domain.FocusSessions.CommandHandler
+﻿namespace FocusWarden.DataAccess.Domain.FocusSessions.CommandHandler
 {
+    using Command;
+    using Interfaces;
+    using MediatR;
+    using System;
+    using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
+
     public class RemoveFocusSessionCommandHandler : IRequestHandler<RemoveFocusSessionCommand>
     {
         private readonly IDataSettings dataSettings;

@@ -1,9 +1,9 @@
-﻿using FocusWarden.DataAccess.Interfaces;
-using System;
-using System.Collections.Generic;
-
-namespace FocusWarden.DataAccess.Models
+﻿namespace FocusWarden.DataAccess.Models
 {
+    using Interfaces;
+    using System;
+    using System.Collections.Generic;
+
     [Serializable]
     public class TodoItem : ISetEntity
     {
@@ -11,8 +11,6 @@ namespace FocusWarden.DataAccess.Models
         {
             Labels = new List<Label>();
         }
-
-        public string Id { get; set; }
 
         public DateTime CreatedAt { get; set; }
 
@@ -25,6 +23,8 @@ namespace FocusWarden.DataAccess.Models
         public bool IsDone { get; set; }
 
         public List<Label> Labels { get; set; }
+
+        public string Id { get; set; }
 
 
         public class Label

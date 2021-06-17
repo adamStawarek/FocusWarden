@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace FocusWarden.Lib.Helpers.Interfaces
+﻿namespace FocusWarden.Lib.Helpers.Interfaces
 {
+    using System.Collections.Generic;
+
     public interface IMotivationSentenceProvider
     {
         IEnumerable<string> GetMotivationSentences();
