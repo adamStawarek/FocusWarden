@@ -7,6 +7,10 @@
     <StartupObject>FocusWarden.App</StartupObject>
     <ApplicationIcon>shield.ico</ApplicationIcon>
   </PropertyGroup>
+  
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
