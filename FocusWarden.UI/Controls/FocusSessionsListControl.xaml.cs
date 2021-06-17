@@ -1,11 +1,6 @@
-﻿using System.Windows.Controls;
-
-namespace FocusWarden.UI.Controls
+﻿namespace FocusWarden.UI.Controls
 {
-    /// <summary>
-    /// Interaction logic for FocusSessionsListControl.xaml
-    /// </summary>
-    public partial class FocusSessionsListControl : UserControl
+    public partial class FocusSessionsListControl
     {
         public FocusSessionsListControl()
         {

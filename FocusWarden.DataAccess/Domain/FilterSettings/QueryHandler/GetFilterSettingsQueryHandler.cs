@@ -8,7 +8,7 @@ namespace FocusWarden.DataAccess.Domain.FilterSettings.QueryHandler
 {
     public class GetFilterSettingsQueryHandler : IRequestHandler<GetFilterSettingsQuery, Models.FilterSettings>
     {
-        private IDataSettings dataSettings;
+        private readonly IDataSettings dataSettings;
 
         public GetFilterSettingsQueryHandler(IDataSettings dataSettings)
         {

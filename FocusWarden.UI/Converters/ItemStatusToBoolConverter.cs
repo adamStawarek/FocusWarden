@@ -10,25 +10,23 @@ namespace FocusWarden.UI.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (!(value is TodoItemStatus status)) return DependencyProperty.UnsetValue;
-
-            return status.ToString().Equals(parameter as string);
+            return value is not TodoItemStatus status ? 
+                DependencyProperty.UnsetValue : status.ToString().Equals(parameter as string);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (!(value is bool isChecked)) return DependencyProperty.UnsetValue;
+            if (value is not bool isChecked)
+                return DependencyProperty.UnsetValue;
 
-            var status = (TodoItemStatus)Enum.Parse(typeof(TodoItemStatus), parameter as string);
+            var status = (TodoItemStatus)Enum.Parse(typeof(TodoItemStatus), parameter as string ?? string.Empty);
 
             if (status == TodoItemStatus.Open)
             {
                 return isChecked ? TodoItemStatus.Open : TodoItemStatus.Closed;
             }
-            else
-            {
-                return isChecked ? TodoItemStatus.Closed : TodoItemStatus.Open;
-            }
+
+            return isChecked ? TodoItemStatus.Closed : TodoItemStatus.Open;
         }
     }
 }

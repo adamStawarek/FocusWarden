@@ -1,8 +1,6 @@
-﻿using System.Windows.Controls;
-
-namespace FocusWarden.UI.Views
+﻿namespace FocusWarden.UI.Views
 {
-    public partial class BacklogView : UserControl
+    public partial class BacklogView
     {
         public BacklogView()
         {

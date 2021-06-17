@@ -8,7 +8,7 @@ namespace FocusWarden.DataAccess.Domain.FilterSettings.CommandHandler
 {
     public class UpdateFilterSettingsCommandHandler : IRequestHandler<UpdateFilterSettingsCommand>
     {
-        private IDataSettings dataSettings;
+        private readonly IDataSettings dataSettings;
 
         public UpdateFilterSettingsCommandHandler(IDataSettings dataSettings)
         {

@@ -20,8 +20,8 @@ namespace FocusWarden.DataAccess.Domain.TodoItems.CommandHandler
         public Task<Unit> Handle(UpdateTodoItemCommand request, CancellationToken cancellationToken)
         {
             var todoItem = dataSettings.TodoItems.LocalSet.Single(t => t.Id == request.Id);
-            todoItem.Title = request.Title != null ? request.Title : todoItem.Title;
-            todoItem.ClosedAt = !todoItem.IsDone && request.IsDone.HasValue && request.IsDone.Value  ? (DateTime?)DateTime.Now : null;
+            todoItem.Title = request.Title ?? todoItem.Title;
+            todoItem.ClosedAt = !todoItem.IsDone && request.IsDone.HasValue && request.IsDone.Value  ? DateTime.Now : null;
             todoItem.IsDone = request.IsDone ?? todoItem.IsDone;           
             dataSettings.TodoItems.LocalSet.Update(todoItem);
             dataSettings.Save();

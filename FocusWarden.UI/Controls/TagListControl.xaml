@@ -15,9 +15,7 @@
                 <Label x:Name="SomeLabel"
                        Content="Add new tag..."
                        Foreground="LightGray"/>
-                <TextBox x:Name="TagTextBox"
-                         KeyDown="TextBlock_KeyDown" 
-                         TextChanged="TagTextBox_TextChanged"/>
+                <TextBox x:Name="TagTextBox" />
             </Grid>
         </WrapPanel>
     </Border>

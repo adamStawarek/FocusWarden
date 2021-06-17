@@ -1,5 +1,4 @@
-﻿using FocusWarden.DataAccess.Domain.FilterSettings.Query;
-using FocusWarden.DataAccess.Domain.FocusSessions.Command;
+﻿using FocusWarden.DataAccess.Domain.FocusSessions.Command;
 using FocusWarden.DataAccess.Domain.FocusSessions.Query;
 using FocusWarden.DataAccess.Domain.SessionDuration.Command;
 using FocusWarden.DataAccess.Domain.SessionDuration.Query;
@@ -41,17 +40,21 @@ namespace FocusWarden.Lib.ViewModels
         private readonly DispatcherTimer timer;
 
         private string currentFocusSessionId;
+
         #endregion
 
         #region Properties
+
         private TimeSpan time;
+
         public TimeSpan Time
         {
             get => time;
             set => SetProperty(ref time, value);
         }
-        
+
         private TimeSpan sessionDuration;
+
         public TimeSpan SessionDuration
         {
             get => sessionDuration;
@@ -63,20 +66,23 @@ namespace FocusWarden.Lib.ViewModels
         }
 
         private bool sessionActive;
+
         public bool SessionActive
         {
             get => sessionActive;
             set => SetProperty(ref sessionActive, value);
         }
 
-        private bool isCreateTodoItemItemPopupOpen;
+        private bool isTodoItemPopupOpen;
+
         public bool IsTodoItemPopupOpen
         {
-            get => isCreateTodoItemItemPopupOpen;
-            set => SetProperty(ref isCreateTodoItemItemPopupOpen, value);
+            get => isTodoItemPopupOpen;
+            set => SetProperty(ref isTodoItemPopupOpen, value);
         }
 
         private string motivationSentence;
+
         public string MotivationSentence
         {
             get => motivationSentence;
@@ -84,39 +90,46 @@ namespace FocusWarden.Lib.ViewModels
         }
 
         private TaskNotifier<IEnumerable<FocusSession>> getFocusSessionsTask;
+
         private Task<IEnumerable<FocusSession>> GetFocusSessionsTask
         {
             get => getFocusSessionsTask;
             set => SetPropertyAndNotifyOnCompletion(ref getFocusSessionsTask, value,
-                task => OnPropertyChanged(nameof(DailyFocusSessions)));
+                _ => OnPropertyChanged(nameof(DailyFocusSessions)));
         }
 
         public List<FocusSession> DailyFocusSessions => GetFocusSessionsTask.Status == TaskStatus.RanToCompletion
-            ? new List<FocusSession>(GetFocusSessionsTask.Result) : null;
-        
+            ? new List<FocusSession>(GetFocusSessionsTask.Result)
+            : null;
+
         private TaskNotifier<IEnumerable<TodoItem>> getTodoItemsTask;
+
         private Task<IEnumerable<TodoItem>> GetTodoItemsTask
         {
             get => getTodoItemsTask;
             set => SetPropertyAndNotifyOnCompletion(ref getTodoItemsTask, value,
-                task => OnPropertyChanged(nameof(TodoItems)));
+                _ => OnPropertyChanged(nameof(TodoItems)));
         }
-        
+
         public List<TodoItem> TodoItems => GetTodoItemsTask.Status == TaskStatus.RanToCompletion
-            ? new List<TodoItem>(GetTodoItemsTask.Result) : null;
+            ? new List<TodoItem>(GetTodoItemsTask.Result)
+            : null;
 
         public string TodoItemPopupText => EditedToDoItem?.Title ?? string.Empty;
 
         private TodoItem editedToDoItem;
+
         public TodoItem EditedToDoItem
         {
             get => editedToDoItem;
             set => SetProperty(ref editedToDoItem, value);
         }
+
         #endregion
 
         #region Commands
-        public IRelayCommand StartTimerCommand { get; }
+
+        public IAsyncRelayCommand StartTimerCommand { get; }
         public IRelayCommand StopTimerCommand { get; }
         public IAsyncRelayCommand IncreaseSessionTimeCommand { get; }
         public IAsyncRelayCommand DecreaseSessionTimeCommand { get; }
@@ -126,6 +139,7 @@ namespace FocusWarden.Lib.ViewModels
         public IAsyncRelayCommand<object> RemoveFocusSessionCommand { get; }
         public IRelayCommand OpenCreateTodoItemCommand { get; }
         public IRelayCommand<object> OpenEditTodoItemCommand { get; }
+
         #endregion
 
         public SessionViewModel(IToastNotification notification, IMediator mediator)
@@ -139,7 +153,7 @@ namespace FocusWarden.Lib.ViewModels
             motivationSentenceProvider = new MotivationSentencesProvider();
 
             SessionDuration = mediator.Send(new GetSessionDurationQuery()).Result;
-            
+
             timer = new DispatcherTimer
             {
                 Interval = TimeSpan.FromSeconds(1)
@@ -170,7 +184,7 @@ namespace FocusWarden.Lib.ViewModels
         private async Task RemoveFocusSessionAsync(object obj)
         {
             if (obj is not FocusSession session) return;
-            await mediator.Send(new RemoveFocusSessionCommand() { Id = session.Id });
+            await mediator.Send(new RemoveFocusSessionCommand() {Id = session.Id});
             GetFocusSessionsTask = mediator.Send(new GetFocusSessionsQuery() {Date = DateTime.Now});
         }
 
@@ -186,12 +200,7 @@ namespace FocusWarden.Lib.ViewModels
             {
                 Type = Common.Enumerators.AtomicOperationType.Increase
             });
-            Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal,
-                new Action(() =>
-                {
-                    IncreaseSessionTimeCommand.NotifyCanExecuteChanged();
-                    DecreaseSessionTimeCommand.NotifyCanExecuteChanged();
-                }));
+            RefreshIncreaseDecreaseSessionTimeButtonsState();
         }
 
         private async Task DecreaseSessionTimeAsync()
@@ -200,12 +209,7 @@ namespace FocusWarden.Lib.ViewModels
             {
                 Type = Common.Enumerators.AtomicOperationType.Decrease
             });
-            Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal,
-                new Action(() =>
-                {
-                    IncreaseSessionTimeCommand.NotifyCanExecuteChanged();
-                    DecreaseSessionTimeCommand.NotifyCanExecuteChanged();
-                }));
+            RefreshIncreaseDecreaseSessionTimeButtonsState();
         }
 
         private void OpenCreateTodoItemPopup()
@@ -217,7 +221,7 @@ namespace FocusWarden.Lib.ViewModels
 
         private void OpenEditTodoItemPopup(object obj)
         {
-            EditedToDoItem = (TodoItem)obj;
+            EditedToDoItem = (TodoItem) obj;
             IsTodoItemPopupOpen = true;
             OnPropertyChanged(new PropertyChangedEventArgs(nameof(TodoItemPopupText)));
         }
@@ -225,7 +229,7 @@ namespace FocusWarden.Lib.ViewModels
         private async Task RemoveTodoItemAsync(object obj)
         {
             var todoItem = obj as TodoItem;
-            await mediator.Send(new RemoveTodoItemCommand() { Id = todoItem?.Id });
+            await mediator.Send(new RemoveTodoItemCommand() {Id = todoItem?.Id});
             GetTodoItemsTask = mediator.Send(new GetTodoItemsQuery());
         }
 
@@ -234,7 +238,7 @@ namespace FocusWarden.Lib.ViewModels
             var todoItem = obj as TodoItem;
             await mediator.Send(new UpdateTodoItemCommand()
             {
-                Id = todoItem?.Id, IsDone = !todoItem.IsDone
+                Id = todoItem?.Id, IsDone = todoItem is {IsDone: false}
             });
             GetTodoItemsTask = mediator.Send(new GetTodoItemsQuery());
         }
@@ -243,7 +247,7 @@ namespace FocusWarden.Lib.ViewModels
         {
             var title = obj as string;
 
-            if (this.EditedToDoItem != null)
+            if (EditedToDoItem != null)
             {
                 await mediator.Send(new UpdateTodoItemCommand()
                 {
@@ -252,11 +256,11 @@ namespace FocusWarden.Lib.ViewModels
                     IsDone = EditedToDoItem.IsDone
                 });
 
-                this.EditedToDoItem = null;
+                EditedToDoItem = null;
             }
             else
             {
-                await mediator.Send(new AddTodoItemCommand() { Title = title });
+                await mediator.Send(new AddTodoItemCommand() {Title = title});
             }
 
             GetTodoItemsTask = mediator.Send(new GetTodoItemsQuery());
@@ -268,13 +272,7 @@ namespace FocusWarden.Lib.ViewModels
             timer.Stop();
 
             Time = sessionDuration;
-
-            Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal,
-                new Action(() =>
-                {
-                    IncreaseSessionTimeCommand.NotifyCanExecuteChanged(); 
-                    DecreaseSessionTimeCommand.NotifyCanExecuteChanged();
-                }));
+            RefreshIncreaseDecreaseSessionTimeButtonsState();
         }
 
         private async Task StartTimerAsync()
@@ -288,6 +286,11 @@ namespace FocusWarden.Lib.ViewModels
             currentFocusSessionId = await mediator.Send(new AddFocusSessionCommand());
             GetFocusSessionsTask = mediator.Send(new GetFocusSessionsQuery() {Date = DateTime.Now});
 
+            RefreshIncreaseDecreaseSessionTimeButtonsState();
+        }
+
+        private void RefreshIncreaseDecreaseSessionTimeButtonsState()
+        {
             Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal,
                 new Action(() =>
                 {
@@ -298,8 +301,8 @@ namespace FocusWarden.Lib.ViewModels
 
         private void RefreshMotivationSentence()
         {
-            var motivationSentences = motivationSentenceProvider.GetMotivationSentences();
-            var sentenceIndex = Random.Next(motivationSentences.Count());
+            var motivationSentences = motivationSentenceProvider.GetMotivationSentences().ToArray();
+            var sentenceIndex = Random.Next(motivationSentences.Length);
             MotivationSentence = motivationSentences.ElementAt(sentenceIndex);
         }
 

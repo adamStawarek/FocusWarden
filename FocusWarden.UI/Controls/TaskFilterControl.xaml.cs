@@ -1,8 +1,6 @@
-﻿using System.Windows.Controls;
-
-namespace FocusWarden.UI.Controls
+﻿namespace FocusWarden.UI.Controls
 {
-    public partial class TaskFilterControl : UserControl
+    public partial class TaskFilterControl
     {
         public TaskFilterControl()
         {

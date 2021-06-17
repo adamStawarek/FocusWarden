@@ -4,10 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:viewModels="clr-namespace:FocusWarden.Lib.ViewModels;assembly=FocusWarden.Lib"
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance Type=viewModels:SessionViewModel}"
              x:Name="This">
     <UserControl.Resources>
         <ResourceDictionary Source="pack://application:,,,/FocusWarden.Styles;component/Theme.xaml" />
@@ -36,8 +37,7 @@
                                              Height="50" />
                 </Button>
                 <Button Style="{StaticResource MaterialDesignIconButton}"
-                        Command="{Binding DecreaseSessionTimeCommand}"
-                        IsEnabled="{Binding DecreaseSessionTimeCommand.CanExecute}">
+                        Command="{Binding DecreaseSessionTimeCommand}">
                     <materialDesign:PackIcon Kind="Minus"
                                              Width="50"
                                              Height="50" />

@@ -7,7 +7,7 @@ namespace FocusWarden.Lib.Helpers
     internal class MotivationSentencesProvider : IMotivationSentenceProvider
     {
         private static readonly Lazy<IEnumerable<string>> MotivationSentences =
-            new Lazy<IEnumerable<string>>(() => new List<string>
+            new(() => new List<string>
             {
                 "Success consists of going from failure to failure without loss of enthusiasm.",
                 "Our greatest weakness lies in giving up. The most certain way to succeed is always to try just one more time.",
@@ -18,7 +18,7 @@ namespace FocusWarden.Lib.Helpers
                 "You may only succeed if you desire succeeding; you may only fail if you do not mind failing.",
                 "Develop success from failures. Discouragement and failure are two of the surest stepping stones to success.",
                 "To be successful you must accept all challenges that come your way. You can’t just accept the ones you like.",
-                "Success doesn’t come to you, you’ve got to go to it.",
+                "Success doesn't come to you, you’ve got to go to it.",
                 "If you want to achieve excellence, you can get there today. As of this second, quit doing less-than-excellent work.",
                 "Failure will never overtake me if my determination to succeed is strong enough.",
                 "Success means having the courage, the determination, and the will to become the person you believe you were meant to be.",

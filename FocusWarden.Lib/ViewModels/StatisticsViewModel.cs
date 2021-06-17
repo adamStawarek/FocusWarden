@@ -4,6 +4,7 @@ using LiveCharts.Defaults;
 using LiveCharts.Wpf;
 using MediatR;
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
@@ -17,9 +18,9 @@ namespace FocusWarden.Lib.ViewModels
 
         private readonly IMediator mediator;
         private readonly Func<double, string> dailyYFormatter;
+        private readonly Func<double, string> weeklyYFormatter;
         private string[] dailyLabels;
         private string[] weeklyLabels;
-        private Func<double, string> weeklyYFormatter;
         private string[] weekNumbers;
 
         #endregion
@@ -51,7 +52,7 @@ namespace FocusWarden.Lib.ViewModels
         public Func<double, string> WeeklyYFormatter
         {
             get => weeklyYFormatter;
-            set => SetProperty(ref weeklyYFormatter, value);
+            private init => SetProperty(ref weeklyYFormatter, value);
         }
 
         public ChartValues<HeatPoint> MonthlySeries { get; set; }
@@ -77,11 +78,11 @@ namespace FocusWarden.Lib.ViewModels
             this.mediator = mediator;
 
             DailySeries = new SeriesCollection();
-            DailyYFormatter = value => value.ToString();
+            DailyYFormatter = value => value.ToString(CultureInfo.InvariantCulture);
             DailyLabels = Array.Empty<string>();
 
             WeeklySeries = new SeriesCollection();
-            WeeklyYFormatter = value => value.ToString();
+            WeeklyYFormatter = value => value.ToString(CultureInfo.InvariantCulture);
             WeeklyLabels = Array.Empty<string>();
 
             MonthlySeries = new ChartValues<HeatPoint>();
@@ -126,7 +127,7 @@ namespace FocusWarden.Lib.ViewModels
                 .ToDictionary(s => s.Key.Hour, s => s.Value);
 
             var hours = Enumerable.Range(0, DateTime.Now.Hour + 1).ToList();
-            hours.ForEach(h =>
+            foreach (var h in hours)
             {
                 if (!completed.ContainsKey(h))
                 {
@@ -137,7 +138,7 @@ namespace FocusWarden.Lib.ViewModels
                 {
                     notCompleted.Add(h, 0);
                 }
-            });
+            }
 
             completed = completed
                 .OrderBy(s => s.Key)
@@ -184,18 +185,18 @@ namespace FocusWarden.Lib.ViewModels
                 .ToDictionary(s => s.Key.DayOfWeek, s => s.Value);
 
             var days = Enumerable.Range(1, currentDay).ToList();
-            days.ForEach(dayOfWeek =>
+            foreach (var dayOfWeek in days)
             {
-                if (!completed.ContainsKey((DayOfWeek) ((int) dayOfWeek % 7)))
+                if (!completed.ContainsKey((DayOfWeek) (dayOfWeek % 7)))
                 {
                     completed.Add((DayOfWeek) dayOfWeek, 0);
                 }
 
-                if (!notCompleted.ContainsKey((DayOfWeek) ((int) dayOfWeek % 7)))
+                if (!notCompleted.ContainsKey((DayOfWeek) (dayOfWeek % 7)))
                 {
                     notCompleted.Add((DayOfWeek) dayOfWeek, 0);
                 }
-            });
+            }
 
             completed = completed
                 .OrderBy(s => s.Key.Equals(DayOfWeek.Sunday))

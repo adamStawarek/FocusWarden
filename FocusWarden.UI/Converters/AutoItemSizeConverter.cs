@@ -10,9 +10,9 @@ namespace FocusWarden.UI.Converters
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             if (values.Length != 3) return DependencyProperty.UnsetValue;
-            if (!(values[0] is int itemsCount)) return DependencyProperty.UnsetValue;
-            if (!(values[1] is double containerHeight)) return DependencyProperty.UnsetValue;
-            if (!(values[2] is double containerWidth)) return DependencyProperty.UnsetValue;
+            if (values[0] is not int itemsCount) return DependencyProperty.UnsetValue;
+            if (values[1] is not double containerHeight) return DependencyProperty.UnsetValue;
+            if (values[2] is not double containerWidth) return DependencyProperty.UnsetValue;
             var containerArea = containerWidth * containerHeight;
             var maxItemArea = containerArea / itemsCount;
             var idealItemSize = Math.Sqrt(maxItemArea);

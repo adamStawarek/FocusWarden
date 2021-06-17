@@ -16,7 +16,6 @@
               FontWeight="Bold">
         <Expander.Resources>
             <converters:ItemStatusToBoolConverter x:Key="ItemStatusToBoolConverter" />
-            <converters:EnumeratorToStringConverter x:Key="EnumeratorToStringConverter" />
             <converters:FilterSettingsToHeaderConverter x:Key="FilterSettingsToHeaderConverter" />
         </Expander.Resources>
         <Expander.Header>
@@ -40,17 +39,17 @@
 
             <StackPanel Orientation="Horizontal"
                         Margin="10">
-                <CheckBox x:Name="cbxStatus"
+                <CheckBox x:Name="CbxStatus"
                           Content="Status"
                           IsChecked="{Binding Status.IsChecked}"
                           Margin="5"
                           Width="100" />
-                <RadioButton IsEnabled="{Binding ElementName=cbxStatus,Path=IsChecked}"
+                <RadioButton IsEnabled="{Binding ElementName=CbxStatus,Path=IsChecked}"
                              Content="Open"
                              IsChecked="{Binding Status.Value, Converter={StaticResource ItemStatusToBoolConverter},ConverterParameter=Open}"
                              Margin="5"
                              GroupName="TodoItemStatus" />
-                <RadioButton IsEnabled="{Binding ElementName=cbxStatus,Path=IsChecked}"
+                <RadioButton IsEnabled="{Binding ElementName=CbxStatus,Path=IsChecked}"
                              Content="Closed"
                              Margin="5"
                              GroupName="TodoItemStatus" />
@@ -59,12 +58,12 @@
             <StackPanel Orientation="Horizontal"
                         Margin="10"
                         Grid.Row="1">
-                <CheckBox x:Name="cbxCreatedAt"
+                <CheckBox x:Name="CbxCreatedAt"
                           Content="Created at"
                           IsChecked="{Binding CreatedAt.IsChecked}"
                           Margin="5"
                           Width="100" />
-                <DatePicker IsEnabled="{Binding ElementName=cbxCreatedAt,Path=IsChecked}"
+                <DatePicker IsEnabled="{Binding ElementName=CbxCreatedAt,Path=IsChecked}"
                             SelectedDate="{Binding CreatedAt.Value}"
                             Width="150" />
             </StackPanel>
@@ -72,12 +71,12 @@
             <StackPanel Orientation="Horizontal"
                         Margin="10"
                         Grid.Row="2">
-                <CheckBox x:Name="cbxClosedAt"
+                <CheckBox x:Name="CbxClosedAt"
                           Content="Closed at"
                           IsChecked="{Binding ClosedAt.IsChecked, Mode=TwoWay}"
                           Margin="5"
                           Width="100" />
-                <DatePicker IsEnabled="{Binding ElementName=cbxClosedAt,Path=IsChecked}"
+                <DatePicker IsEnabled="{Binding ElementName=CbxClosedAt,Path=IsChecked}"
                             SelectedDate="{Binding ClosedAt.Value}"
                             Width="150" />
             </StackPanel>

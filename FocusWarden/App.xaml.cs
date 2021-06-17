@@ -1,10 +1,9 @@
 ﻿using FocusWarden.Common;
-using System.Windows;
 using FocusWarden.Lib;
 
 namespace FocusWarden
 {
-    public partial class App : Application
+    public partial class App
     {
         public const string AppName = "FocusWarden";
         public const string Year = "2020";

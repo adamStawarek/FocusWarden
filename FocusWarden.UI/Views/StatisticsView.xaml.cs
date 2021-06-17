@@ -1,8 +1,6 @@
-﻿using System.Windows.Controls;
-
-namespace FocusWarden.UI.Views
+﻿namespace FocusWarden.UI.Views
 {
-    public partial class StatisticsView : UserControl
+    public partial class StatisticsView
     {
         public StatisticsView()
         {

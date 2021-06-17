@@ -1,8 +1,6 @@
-﻿using System.Windows;
-
-namespace FocusWarden.UI.Views
+﻿namespace FocusWarden.UI.Views
 {
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
         public MainWindow()
         {

@@ -1,8 +1,6 @@
-﻿using System.Windows.Controls;
-
-namespace FocusWarden.UI.Views
+﻿namespace FocusWarden.UI.Views
 {
-    public partial class SessionView : UserControl
+    public partial class SessionView
     {
         public SessionView()
         {

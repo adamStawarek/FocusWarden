@@ -14,7 +14,7 @@ namespace FocusWarden.UI.Converters
                 return DependencyProperty.UnsetValue;
             if (values[0] is int intVal)
                 values[0] = (double)intVal;
-            if (!(values[0] is double val))
+            if (values[0] is not double val)
                 return DependencyProperty.UnsetValue;
             if (!(double.TryParse(values[1] as string, out var conditionVal)))
                 return DependencyProperty.UnsetValue;
