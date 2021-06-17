@@ -29,6 +29,7 @@
 /.vs/VSWorkspaceState.json
 /.vs/slnx.sqlite
 /.vs
+/.idea
 /FocusWarden.Tests.UI/obj/Release
 /FocusWarden.Styles/obj
 /FocusWarden.Styles/bin/Debug/netcoreapp3.1
