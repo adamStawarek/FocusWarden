@@ -1,89 +1,75 @@
 ﻿using FocusWarden.DataAccess.Domain.FocusSessions.Query;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
 using LiveCharts;
 using LiveCharts.Defaults;
 using LiveCharts.Wpf;
 using MediatR;
 using System;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
+using Microsoft.Toolkit.Mvvm.Input;
 
 namespace FocusWarden.Lib.ViewModels
 {
-    public class StatisticsViewModel : ViewModelBase
+    public class StatisticsViewModel : ObservableObject
     {
         #region Fields
+
         private readonly IMediator mediator;
+        private readonly Func<double, string> dailyYFormatter;
         private string[] dailyLabels;
-        private Func<double, string> dailyYFormatter;
         private string[] weeklyLabels;
         private Func<double, string> weeklyYFormatter;
         private string[] weekNumbers;
+
         #endregion
 
         #region Properties
+
         public SeriesCollection DailySeries { get; set; }
+
         public string[] DailyLabels
         {
             get => dailyLabels;
-            set
-            {
-                if (dailyLabels == value) return;
-                dailyLabels = value;
-                RaisePropertyChanged();
-            }
+            set => SetProperty(ref dailyLabels, value);
         }
+
         public Func<double, string> DailyYFormatter
         {
             get => dailyYFormatter;
-            set
-            {
-                if (dailyYFormatter == value) return;
-                dailyYFormatter = value;
-                RaisePropertyChanged();
-            }
+            init => SetProperty(ref dailyYFormatter, value);
         }
 
         public SeriesCollection WeeklySeries { get; set; }
+
         public string[] WeeklyLabels
         {
             get => weeklyLabels;
-            set
-            {
-                if (weeklyLabels == value) return;
-                weeklyLabels = value;
-                RaisePropertyChanged();
-            }
+            set => SetProperty(ref weeklyLabels, value);
         }
+
         public Func<double, string> WeeklyYFormatter
         {
             get => weeklyYFormatter;
-            set
-            {
-                if (weeklyYFormatter == value) return;
-                weeklyYFormatter = value;
-                RaisePropertyChanged();
-            }
+            set => SetProperty(ref weeklyYFormatter, value);
         }
 
         public ChartValues<HeatPoint> MonthlySeries { get; set; }
-        public string[] WeekNumbers 
-        { 
+
+        public string[] WeekNumbers
+        {
             get => weekNumbers;
-            set
-            {
-                if (weekNumbers == value) return;
-                weekNumbers = value;
-                RaisePropertyChanged();
-            }
+            set => SetProperty(ref weekNumbers, value);
         }
+
         public string[] WeekDays { get; set; }
+
         #endregion
 
         #region Commands
-        public RelayCommand LoadedCommand { get; set; }
+
+        public IAsyncRelayCommand LoadedCommand { get; }
+
         #endregion
 
         public StatisticsViewModel(IMediator mediator)
@@ -92,38 +78,52 @@ namespace FocusWarden.Lib.ViewModels
 
             DailySeries = new SeriesCollection();
             DailyYFormatter = value => value.ToString();
-            DailyLabels = new string[0];
+            DailyLabels = Array.Empty<string>();
 
             WeeklySeries = new SeriesCollection();
             WeeklyYFormatter = value => value.ToString();
-            WeeklyLabels = new string[0];
+            WeeklyLabels = Array.Empty<string>();
 
             MonthlySeries = new ChartValues<HeatPoint>();
-            WeekNumbers = new string[0];
-            var weekDays = new[] { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday };
+            WeekNumbers = Array.Empty<string>();
+            var weekDays = new[]
+            {
+                DayOfWeek.Monday,
+                DayOfWeek.Tuesday,
+                DayOfWeek.Wednesday,
+                DayOfWeek.Thursday,
+                DayOfWeek.Friday,
+                DayOfWeek.Saturday,
+                DayOfWeek.Sunday
+            };
             WeekDays = weekDays.Select(d => d.ToString()).ToArray();
 
-            LoadedCommand = new RelayCommand(OnLoaded);
+            LoadedCommand = new AsyncRelayCommand(OnLoadedAsync);
         }
 
-        private async void OnLoaded()
+        private Task OnLoadedAsync()
         {
             var t1 = SetUpDailySessionCountChart();
             var t2 = SetUpWeeklySessionCountChart();
             var t3 = SetUpMonthlySessionCountChart();
 
-            await Task.WhenAll(t1, t2, t3);
+            return Task.WhenAll(t1, t2, t3);
         }
 
         private async Task SetUpDailySessionCountChart()
         {
-            var focusSession = await mediator.Send(new GetFocusSessionsQuery() { Date = DateTime.Now });
+            var focusSession = await mediator.Send(
+                new GetFocusSessionsQuery() {Date = DateTime.Now});
 
-            var groupedByHour = focusSession.GroupBy(s => new { s.Date.Hour, s.IsCompleted })
-                                            .ToDictionary(s => s.Key, s => s.Count());
-
-            var completed = groupedByHour.Where(s => s.Key.IsCompleted).ToDictionary(s => s.Key.Hour, s => s.Value);
-            var notCompleted = groupedByHour.Where(s => !s.Key.IsCompleted).ToDictionary(s => s.Key.Hour, s => s.Value);
+            var groupedByHour = focusSession
+                .GroupBy(s => new {s.Date.Hour, s.IsCompleted})
+                .ToDictionary(s => s.Key, s => s.Count());
+            var completed = groupedByHour
+                .Where(s => s.Key.IsCompleted)
+                .ToDictionary(s => s.Key.Hour, s => s.Value);
+            var notCompleted = groupedByHour
+                .Where(s => !s.Key.IsCompleted)
+                .ToDictionary(s => s.Key.Hour, s => s.Value);
 
             var hours = Enumerable.Range(0, DateTime.Now.Hour + 1).ToList();
             hours.ForEach(h =>
@@ -139,8 +139,12 @@ namespace FocusWarden.Lib.ViewModels
                 }
             });
 
-            completed = completed.OrderBy(s => s.Key).ToDictionary(s => s.Key, s => s.Value);
-            notCompleted = notCompleted.OrderBy(s => s.Key).ToDictionary(s => s.Key, s => s.Value);
+            completed = completed
+                .OrderBy(s => s.Key)
+                .ToDictionary(s => s.Key, s => s.Value);
+            notCompleted = notCompleted
+                .OrderBy(s => s.Key)
+                .ToDictionary(s => s.Key, s => s.Value);
 
             DailySeries.Clear();
             DailySeries.AddRange(new[]
@@ -148,13 +152,13 @@ namespace FocusWarden.Lib.ViewModels
                 new StackedColumnSeries
                 {
                     Title = "Completed sessions",
-                    Values = new ChartValues<int>(completed.Select(s=> s.Value)),
+                    Values = new ChartValues<int>(completed.Select(s => s.Value)),
                     DataLabels = true
                 },
                 new StackedColumnSeries
                 {
                     Title = "Partially completed sessions",
-                    Values = new ChartValues<int>(notCompleted.Select(s=> s.Value)),
+                    Values = new ChartValues<int>(notCompleted.Select(s => s.Value)),
                     DataLabels = true
                 }
             });
@@ -164,32 +168,43 @@ namespace FocusWarden.Lib.ViewModels
 
         private async Task SetUpWeeklySessionCountChart()
         {
-            var currentDay = DateTime.Now.DayOfWeek == DayOfWeek.Sunday ? 7 : (int)DateTime.Now.DayOfWeek;
+            var currentDay = DateTime.Now.DayOfWeek == DayOfWeek.Sunday ? 7 : (int) DateTime.Now.DayOfWeek;
             var fromDate = DateTime.Now.AddDays(1 - currentDay);
-            var focusSession = await mediator.Send(new GetFocusSessionsQuery() { FromDate = fromDate, ToDate = DateTime.Now });
+            var focusSession = await mediator.Send(
+                new GetFocusSessionsQuery() {FromDate = fromDate, ToDate = DateTime.Now});
 
-            var groupedByDay = focusSession.GroupBy(s => new { s.Date.DayOfWeek, s.IsCompleted })
-                                            .ToDictionary(s => s.Key, s => s.Count());
-
-            var completed = groupedByDay.Where(s => s.Key.IsCompleted).ToDictionary(s => s.Key.DayOfWeek, s => s.Value);
-            var notCompleted = groupedByDay.Where(s => !s.Key.IsCompleted).ToDictionary(s => s.Key.DayOfWeek, s => s.Value);
+            var groupedByDay = focusSession
+                .GroupBy(s => new {s.Date.DayOfWeek, s.IsCompleted})
+                .ToDictionary(s => s.Key, s => s.Count());
+            var completed = groupedByDay
+                .Where(s => s.Key.IsCompleted)
+                .ToDictionary(s => s.Key.DayOfWeek, s => s.Value);
+            var notCompleted = groupedByDay
+                .Where(s => !s.Key.IsCompleted)
+                .ToDictionary(s => s.Key.DayOfWeek, s => s.Value);
 
             var days = Enumerable.Range(1, currentDay).ToList();
             days.ForEach(dayOfWeek =>
             {
-                if (!completed.ContainsKey((DayOfWeek)((int)dayOfWeek % 7)))
+                if (!completed.ContainsKey((DayOfWeek) ((int) dayOfWeek % 7)))
                 {
-                    completed.Add((DayOfWeek)dayOfWeek, 0);
+                    completed.Add((DayOfWeek) dayOfWeek, 0);
                 }
 
-                if (!notCompleted.ContainsKey((DayOfWeek)((int)dayOfWeek % 7)))
+                if (!notCompleted.ContainsKey((DayOfWeek) ((int) dayOfWeek % 7)))
                 {
-                    notCompleted.Add((DayOfWeek)dayOfWeek, 0);
+                    notCompleted.Add((DayOfWeek) dayOfWeek, 0);
                 }
             });
 
-            completed = completed.OrderBy(s => s.Key.Equals(DayOfWeek.Sunday)).ThenBy(s => s.Key).ToDictionary(s => s.Key, s => s.Value);
-            notCompleted = notCompleted.OrderBy(s => s.Key.Equals(DayOfWeek.Sunday)).ThenBy(s => s.Key).ToDictionary(s => s.Key, s => s.Value);
+            completed = completed
+                .OrderBy(s => s.Key.Equals(DayOfWeek.Sunday))
+                .ThenBy(s => s.Key)
+                .ToDictionary(s => s.Key, s => s.Value);
+            notCompleted = notCompleted
+                .OrderBy(s => s.Key.Equals(DayOfWeek.Sunday))
+                .ThenBy(s => s.Key)
+                .ToDictionary(s => s.Key, s => s.Value);
 
             WeeklySeries.Clear();
             WeeklySeries.AddRange(new[]
@@ -197,18 +212,18 @@ namespace FocusWarden.Lib.ViewModels
                 new StackedColumnSeries
                 {
                     Title = "Completed sessions",
-                    Values = new ChartValues<int>(completed.Select(s=> s.Value)),
+                    Values = new ChartValues<int>(completed.Select(s => s.Value)),
                     DataLabels = true
                 },
                 new StackedColumnSeries
                 {
                     Title = "Partially completed sessions",
-                    Values = new ChartValues<int>(notCompleted.Select(s=> s.Value)),
+                    Values = new ChartValues<int>(notCompleted.Select(s => s.Value)),
                     DataLabels = true
                 }
             });
 
-            WeeklyLabels = days.Select(d => ((DayOfWeek)(d % 7)).ToString()).ToArray();
+            WeeklyLabels = days.Select(d => ((DayOfWeek) (d % 7)).ToString()).ToArray();
         }
 
         private async Task SetUpMonthlySessionCountChart()
@@ -216,8 +231,8 @@ namespace FocusWarden.Lib.ViewModels
             var today = DateTime.Today;
             var firstDayOfMonth = new DateTime(today.Year, today.Month, 1);
             var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
-
-            var focusSessions = await mediator.Send(new GetFocusSessionsQuery() { FromDate = firstDayOfMonth, ToDate = lastDayOfMonth, Completed = true });
+            var focusSessions = await mediator.Send(
+                new GetFocusSessionsQuery() {FromDate = firstDayOfMonth, ToDate = lastDayOfMonth, Completed = true});
 
             MonthlySeries.Clear();
 
@@ -227,13 +242,13 @@ namespace FocusWarden.Lib.ViewModels
             {
                 var day = firstDayOfMonth.AddDays(d - 1);
 
-                var daySessions = focusSessions.Where(s => s.Date.Day == d).Count();
+                var daySessions = focusSessions.Count(s => s.Date.Day == d);
 
-                var y = day.DayOfWeek == DayOfWeek.Sunday ? 6 : ((int)day.DayOfWeek) - 1;
+                var y = day.DayOfWeek == DayOfWeek.Sunday ? 6 : ((int) day.DayOfWeek) - 1;
 
-                int x = currentWeekInMonth;
+                var x = currentWeekInMonth;
 
-                MonthlySeries.Add(new HeatPoint() { X = x, Y = y, Weight = daySessions });
+                MonthlySeries.Add(new HeatPoint() {X = x, Y = y, Weight = daySessions});
 
                 if (day.DayOfWeek == DayOfWeek.Sunday) currentWeekInMonth++;
             });

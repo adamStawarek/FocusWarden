@@ -1,12 +1,12 @@
-﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
-using System.Windows;
+﻿using System.Windows;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
+using Microsoft.Toolkit.Mvvm.Input;
 
 namespace FocusWarden.Lib.ViewModels
 {
-    public class MainWindowViewModel : ViewModelBase
+    public class MainWindowViewModel : ObservableObject
     {
-        public RelayCommand ExitAppCommand { get; set; }
+        public IRelayCommand ExitAppCommand { get; }
 
         public MainWindowViewModel()
         {

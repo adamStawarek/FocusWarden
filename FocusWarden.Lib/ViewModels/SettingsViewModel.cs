@@ -1,17 +1,17 @@
-﻿using GalaSoft.MvvmLight;
-using MediatR;
+﻿using MediatR;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
 
 namespace FocusWarden.Lib.ViewModels
 {
-    public class SettingsViewModel : ViewModelBase
+    public class SettingsViewModel : ObservableObject
     {
         #region Fields
-        private readonly IMediator _mediator;
+        private readonly IMediator mediator;
         #endregion
 
         public SettingsViewModel(IMediator mediator)
         {
-            this._mediator = mediator;
+            this.mediator = mediator;
         }
     }
 }

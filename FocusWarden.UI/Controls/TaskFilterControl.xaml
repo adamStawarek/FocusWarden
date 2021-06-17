@@ -5,8 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:converters="clr-namespace:FocusWarden.UI.Converters"
+             xmlns:lib="clr-namespace:FocusWarden.Lib;assembly=FocusWarden.Lib"
              mc:Ignorable="d"
-             DataContext="{Binding Source={StaticResource Locator}, Path=TasksFilter}"
+             DataContext="{Binding Source={x:Static lib:DependencyResolver.Instance}, Path=TasksFilter}"
              x:Name="Root">
     <UserControl.Resources>
         <ResourceDictionary Source="pack://application:,,,/FocusWarden.Styles;component/Theme.xaml" />

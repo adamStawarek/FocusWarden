@@ -1,5 +1,4 @@
-﻿using FocusWarden.DataAccess.Models;
-using MediatR;
+﻿using MediatR;
 
 namespace FocusWarden.DataAccess.Domain.TodoItems.Command
 {

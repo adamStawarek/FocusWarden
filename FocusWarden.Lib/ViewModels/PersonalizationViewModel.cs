@@ -1,9 +1,9 @@
-﻿using GalaSoft.MvvmLight;
-using MediatR;
+﻿using MediatR;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
 
 namespace FocusWarden.Lib.ViewModels
 {
-    public class PersonalizationViewModel : ViewModelBase
+    public class PersonalizationViewModel : ObservableObject
     {
         private readonly IMediator mediator;
 

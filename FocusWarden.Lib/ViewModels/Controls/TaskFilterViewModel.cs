@@ -1,46 +1,76 @@
 ﻿using FocusWarden.DataAccess.Domain.FilterSettings.Command;
 using FocusWarden.DataAccess.Domain.FilterSettings.Query;
 using FocusWarden.DataAccess.Models;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
 using MediatR;
 using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
+using Microsoft.Toolkit.Mvvm.Input;
 
 namespace FocusWarden.Lib.ViewModels.Controls
 {
-    public class TaskFilterViewModel : ViewModelBase
+    public class TaskFilterViewModel : ObservableObject
     {
         #region Fields
-        private IMediator _mediator;
+
+        private readonly IMediator mediator;
+
         #endregion
 
         #region Events & Properties
-        public event EventHandler Filter;
 
-        public FilterSettings FilterSettings { get; set; } 
+        public event EventHandler Filter;
+        
+        private TaskNotifier<FilterSettings> getFilterSettingsTask;
+        private Task<FilterSettings> GetFilterSettingsTask
+        {
+            get => getFilterSettingsTask;
+            set => SetPropertyAndNotifyOnCompletion(ref getFilterSettingsTask, value,
+                _ => OnPropertyChanged(nameof(FilterSettings)));
+        }
+
+        public FilterSettings FilterSettings => GetFilterSettingsTask.Status == TaskStatus.RanToCompletion
+            ? GetFilterSettingsTask.Result
+            : null;
+
         #endregion
 
         #region Commands
-        public RelayCommand FilterCommand { get; set; }
 
-        public RelayCommand ResetCommand { get; set; } 
+        public IAsyncRelayCommand FilterCommand { get; }
+        public IAsyncRelayCommand ResetCommand { get; }
+
         #endregion
 
         public TaskFilterViewModel(IMediator mediator)
         {
-            this._mediator = mediator;
+            this.mediator = mediator;
 
-            FilterSettings = _mediator.Send(new GetFilterSettingsQuery()).GetAwaiter().GetResult();
+            FilterCommand = new AsyncRelayCommand(OnFilterSettingsChangedAsync);
+            ResetCommand = new AsyncRelayCommand(ResetFilterSettingsAsync);
 
-            FilterCommand = new RelayCommand(OnFilterChange);            
-            ResetCommand = new RelayCommand(()=> { FilterSettings = new FilterSettings(); OnFilterChange(); });
+            GetFilterSettingsTask = this.mediator.Send(new GetFilterSettingsQuery());
         }
 
-        private async void OnFilterChange()
+        private async Task OnFilterSettingsChangedAsync(CancellationToken cancellationToken)
         {
-            await _mediator.Send(new UpdateFilterSettingsCommand() { Settings = FilterSettings });
+            await mediator.Send(new UpdateFilterSettingsCommand()
+            {
+                Settings = FilterSettings
+            }, cancellationToken);
             Filter?.Invoke(this, EventArgs.Empty);
-            RaisePropertyChanged(nameof(FilterSettings));
+            GetFilterSettingsTask = mediator.Send(new GetFilterSettingsQuery(), cancellationToken);
+        }
+
+        private async Task ResetFilterSettingsAsync(CancellationToken cancellationToken)
+        {
+            await mediator.Send(new UpdateFilterSettingsCommand()
+            {
+                Settings = new FilterSettings()
+            }, cancellationToken);
+            Filter?.Invoke(this, EventArgs.Empty);
+            GetFilterSettingsTask = mediator.Send(new GetFilterSettingsQuery(), cancellationToken);
         }
     }
 }

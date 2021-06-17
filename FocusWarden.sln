@@ -22,8 +22,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FocusWarden.Lib", "FocusWar
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FocusWarden.Common", "FocusWarden.Common\FocusWarden.Common.csproj", "{7F33DE17-553E-4CB2-BB77-11DD66B33D8A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FocusWarden.Tests.UI", "FocusWarden.Tests.UI\FocusWarden.Tests.UI.csproj", "{F3A7DF62-BB95-495F-A2AA-4FAA3B92BAF8}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FocusWarden.Styles", "FocusWarden.Styles\FocusWarden.Styles.csproj", "{C84822C5-7BED-4A70-85C5-BAAFA14AAD2D}"
 EndProject
 Global
@@ -56,10 +54,6 @@ Global
 		{7F33DE17-553E-4CB2-BB77-11DD66B33D8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7F33DE17-553E-4CB2-BB77-11DD66B33D8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F33DE17-553E-4CB2-BB77-11DD66B33D8A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F3A7DF62-BB95-495F-A2AA-4FAA3B92BAF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F3A7DF62-BB95-495F-A2AA-4FAA3B92BAF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F3A7DF62-BB95-495F-A2AA-4FAA3B92BAF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F3A7DF62-BB95-495F-A2AA-4FAA3B92BAF8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C84822C5-7BED-4A70-85C5-BAAFA14AAD2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C84822C5-7BED-4A70-85C5-BAAFA14AAD2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C84822C5-7BED-4A70-85C5-BAAFA14AAD2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -70,7 +64,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{28E7CB04-9AB2-4E26-9362-C96BEE18E6D0} = {14E8725E-841A-44F2-B730-99DC03FBCFBC}
-		{F3A7DF62-BB95-495F-A2AA-4FAA3B92BAF8} = {14E8725E-841A-44F2-B730-99DC03FBCFBC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D68247C0-919F-400D-BA8B-2ED2AB81083A}

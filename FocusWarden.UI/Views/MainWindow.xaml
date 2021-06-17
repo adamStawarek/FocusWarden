@@ -8,6 +8,7 @@
         xmlns:common="clr-namespace:FocusWarden.Common;assembly=FocusWarden.Common"
         mc:Ignorable="d"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:lib="clr-namespace:FocusWarden.Lib;assembly=FocusWarden.Lib"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
         TextElement.FontSize="13"
@@ -20,7 +21,7 @@
         Width="1025"
         ResizeMode="CanMinimize"
         WindowStartupLocation="CenterScreen"
-        DataContext="{Binding Source={StaticResource Locator}, Path=Main}"
+        DataContext="{Binding Source={x:Static lib:DependencyResolver.Instance}, Path=Main}"
         x:Name="This">
     <Window.Resources>
         <ResourceDictionary Source="pack://application:,,,/FocusWarden.Styles;component/Theme.xaml" />
@@ -49,7 +50,7 @@
                                                  Height="24" />
                     </StackPanel>
                 </TabItem.Header>
-                <ContentControl Content="{Binding Source={StaticResource Locator}, Path=Session}" />
+                <ContentControl Content="{Binding Source={x:Static lib:DependencyResolver.Instance}, Path=Session}" />
             </TabItem>
             <TabItem Style="{StaticResource MaterialDesignNavigationRailTabItem}">
                 <TabItem.Header>
@@ -57,7 +58,7 @@
                                              Width="24"
                                              Height="24" />
                 </TabItem.Header>
-                <ContentControl Content="{Binding Source={StaticResource Locator}, Path=Statistics}" />
+                <ContentControl Content="{Binding Source={x:Static lib:DependencyResolver.Instance}, Path=Statistics}" />
             </TabItem>
             <TabItem Style="{StaticResource MaterialDesignNavigationRailTabItem}">
                 <TabItem.Header>
@@ -65,7 +66,7 @@
                                              Width="24"
                                              Height="24" />
                 </TabItem.Header>
-                <ContentControl Content="{Binding Source={StaticResource Locator}, Path=Backlog}" />
+                <ContentControl Content="{Binding Source={x:Static lib:DependencyResolver.Instance}, Path=Backlog}" />
             </TabItem>
             <TabItem Style="{StaticResource MaterialDesignNavigationRailTabItem}">
                 <TabItem.Header>
@@ -73,7 +74,7 @@
                                              Width="24"
                                              Height="24" />
                 </TabItem.Header>
-                <ContentControl Content="{Binding Source={StaticResource Locator}, Path=Settings}" />
+                <ContentControl Content="{Binding Source={x:Static lib:DependencyResolver.Instance}, Path=Settings}" />
             </TabItem>
             <TabItem Style="{StaticResource MaterialDesignNavigationRailTabItem}">
                 <TabItem.Header>

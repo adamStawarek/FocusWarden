@@ -1,10 +1,10 @@
-﻿using GalaSoft.MvvmLight;
-using GongSolutions.Wpf.DragDrop;
+﻿using GongSolutions.Wpf.DragDrop;
 using System.Collections.ObjectModel;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
 
 namespace FocusWarden.Lib.ViewModels
 {
-    public class BacklogViewModel : ViewModelBase, IDropTarget
+    public class BacklogViewModel : ObservableObject, IDropTarget
     {
         public ObservableCollection<ExampleItemViewModel> Items1 { get; set; }
         public ObservableCollection<ExampleItemViewModel> Items2 { get; set; }
@@ -14,18 +14,18 @@ namespace FocusWarden.Lib.ViewModels
         {
             Items1 = new ObservableCollection<ExampleItemViewModel>
             {
-                new ExampleItemViewModel(){Title="Title 1"},
-                new ExampleItemViewModel(){Title="Title 2"}
+                new ExampleItemViewModel() {Title = "Title 1"},
+                new ExampleItemViewModel() {Title = "Title 2"}
             };
             Items2 = new ObservableCollection<ExampleItemViewModel>
             {
-                new ExampleItemViewModel(){Title="Title 3"},
-                new ExampleItemViewModel(){Title="Title 4"}
+                new ExampleItemViewModel() {Title = "Title 3"},
+                new ExampleItemViewModel() {Title = "Title 4"}
             };
             Items3 = new ObservableCollection<ExampleItemViewModel>
             {
-                new ExampleItemViewModel(){Title="Title 5"},
-                new ExampleItemViewModel(){Title="Title 6"}
+                new ExampleItemViewModel() {Title = "Title 5"},
+                new ExampleItemViewModel() {Title = "Title 6"}
             };
         }
 

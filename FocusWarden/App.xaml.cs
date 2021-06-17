@@ -1,5 +1,6 @@
 ﻿using FocusWarden.Common;
 using System.Windows;
+using FocusWarden.Lib;
 
 namespace FocusWarden
 {
@@ -12,6 +13,8 @@ namespace FocusWarden
         {
             Product.AppName = AppName;
             Product.Year = Year;
+            
+            DependencyResolver.Instance.ConfigureServices();
         }
     }
 }
